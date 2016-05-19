@@ -1,0 +1,14 @@
+#!/usr/bin/python
+
+import sys
+
+# http://unicode.org/reports/tr44/#GC_Values_Table
+def pass_code(codepoint, category, decomps):
+	return category in ('Ll', 'Lu', 'Lt', 'Lo', 'Nl', 'Nd', 'No') \
+	and decomps.find('<') < 0
+
+for line in sys.stdin:
+	codepoint, _, category, _, decomps = line.strip().split(';')[0:5]
+	if pass_code(codepoint, category, decomps):
+		print codepoint
+

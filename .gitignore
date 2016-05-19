@@ -1,0 +1,11 @@
+.settings/
+doc/html/
+tests/coverage/
+build*
+*.o
+*.a
+*.so
+*.pyc
+*.zip
+staging/build/
+staging/usr/

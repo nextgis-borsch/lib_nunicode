@@ -1,0 +1,213 @@
+1.6
+
+[+] Unicode 8.0.0 character set support
+[+] implemented contractions in DUCET-based collation of
+    strings, affected functions: nu_strcoll(), nu_strncoll(),
+    nu_strcasecoll(), nu_strcasencoll(), nu_strstr(), nu_strnstr(),
+    nu_strcasestr(), nu_strcasenstr()
+
+    e.g.: nu_strcoll(U+013F, U+004C U+00B7) equals 0 (according to DUCET)
+    see: https://bitbucket.org/alekseyt/nunicode#markdown-header-strings-collation
+
+[+] release build configuration is now "Release" (camel-case):
+    
+    cmake .. -DCMAKE_BUILD_TYPE=Release
+
+    previously supported build configuration "RELEASE" (all-caps)
+    still works, but deprecated and will be removed in future releases
+
+[*] SQLite3 collations NU700 and NU700_NOCASE replaced with
+    NU800 and NU800_NOCASE
+[*] SQLite3 extension renamed from "nunicode" to "nusqlite3",
+    affected files: sqlite3/nu.c -> sqlite3/nusqlite3.c,
+                    sqlite3/nu.h -> sqlite3/nusqlite3.h
+    build: "make nunicode" -> "make nusqlite3"
+    library: libnunicode.so -> libnusqlite3.so
+[*] build scripts need at least CMake 2.8.12
+[*] optional build of unittests: see BUILD
+[*] optional build of sample applications: see BUILD
+[*] changes in build scripts related to multi-configuration IDE
+    generators (by Tamas Kenez, /issue/5)
+[*] ``install`` target  will install CMake config-module 
+    ``nunicode-config.cmake`` which creates the import library
+    ``nunicode::nu``, usage:
+
+    find_package(nunicode REQUIRED)
+    target_link_libraries(*<some-target>* nunicode::nu)
+
+    (by Tamas Kenez)
+
+1.5.2
+
+[+] introduced nu_casemap_read and nu_udb_read as a replacement
+    for NU_CASEMAP_DECODING_FUNCTION and NU_UDB_DECODING_FUNCTION
+    accordingly. NU_*_FUNCTION macros are still available, but
+    not recommended for use
+
+[*] mph.h: hash() renamed to _nu_hash(), mph_hash() renamed to
+    nu_mph_hash(), mph_lookup() renamed to nu_mph_lookup()
+[*] changes to make nunicode build with MSVC (by Tamas Kenez)
+[*] fixed test: test_readstr, which contained a UTF-16BE string literal
+    with a single byte zero-terminator (by Tamas Kenez)
+[*] fixed tests: test_utf16le_decoding, test_utf16he_decoding, which
+    contained string literals with a single byte zero-terminator
+[*] fixed assertions in tests: test_utf32_read_bom,
+    test_utf32_read_invalid_bom, which tested value at memory preceding
+    the actual test string (by Tamas Kenez)
+[*] fixed CMake 3.3 warnings during build (by Tamas Kenez)
+[*] SQLite3 detection during build configuration will look
+    for availability of sqlite3ext.h instead of sqlite3.h
+[*] minor documentation updates
+[*] minor updates for readability
+
+1.5.1
+
+[+] introduced nu_version() fuction complementary to NU_VERSION define
+    in headers
+[+] introduced _nu_tolower(), _nu_toupper(), _nu_tofold() for conditional
+    case mapping and folding
+[+] introduced _nu_transform_read_t for simultaneous string decoding
+    and transformation
+[+] introduced _nu_strtransformlen() complementary to _nu_transform_read_t
+
+[*] fixed bug when trailing U+0000 might not have been detected correctly
+    in big-endian encodings, affected functions: (extra) nu_transformstr(),
+    nu_transformnstr(), nu_readstr(), nu_readnstr(); (strings) nu_strlen(),
+    nu_strnlen()
+[*] nu_utf32be_write() and nu_utf32le_write() will skip actual writing
+    to memory if pointer to output is 0/NULL (in confrormance to all other
+    encoding functions)
+[*] documentation updates
+
+1.5
+
+[+] conformant UTF-8, UTF-16, UTF-32 validation
+
+[*] documentation updates (wording)
+[*] fixed broken links in doc
+
+1.4
+
+[+] Unicode conformant case folding
+[+] introduced nu_tofold()
+[+] new build option: NU_WITH_TOFOLD
+[+] new build option: NU_BUILD_STATIC
+[+] new build option: NU_DISABLE_CONTRACTIONS
+
+[*] nu_ducet_weight() will sort codepoints with undefined weights
+    in codepoint order, after codepoints with defined weights
+[*] performance improvements
+
+For performance reasons several API changes were made:
+
+[*] nu_toupper(), nu_tolower(), nu_udb_lookup() are no longer
+    accept output argument for output decoding function.
+
+    Instead there are two defines provided:
+      NU_CASEMAP_DECODING_FUNCTION (nu_utf8_read)
+      NU_UDB_DECODING_FUNCTION (nu_utf8_read)
+
+    Those are for use on return values of corresponding unctions
+
+[*] accordingly to previous, nu_transformation_t and nu_casemapping_t
+    types are no longer accept output argument for output decoding
+    function
+[*] nu_strtransformlen() is now accepting extra argument - transformation
+    output decoding function
+
+[*] SQLite3 extension updated to follow new folding method
+[*] documentation updated to outline internal API functions
+[*] faster UTF-8 and UTF-16 decoding
+[*] all UTF decoding functions are marked for inlining
+[*] GCC: visibility defaults to "hidden" for all functions if
+    NU_BUILD_STATIC is defined
+
+1.3
+
+[+] Unicode 7.0.0 character set support
+[+] new codepoint weighting interface for collations (nu_codepoint_weight_t)
+[+] NU700 and NU700_NOCASE collations in SQLite3 extension
+
+[-] removed NU630 and NU630_NOCASE collations from SQLite3 extension
+
+[*] faster SQL LIKE implementation
+[*] renamed SQLite3 extension binary to load extension w/o explicit
+    entry point
+
+1.2.1
+
+[+] introduced COLLATE NU630 to SQLite extension - Unicode 6.3.0
+    case-sensitive collation
+[+] introduced COLLATE NU630_NOCASE to SQLite extension - Unicode 6.3.0
+    case-insensitive collation
+
+[-] removed deprecated sqlite3_extension_init() in favor
+    of sqlite3_nunicode_init()
+
+[*] COLLATE NUNICODE is removed in favor of COLLATE NU630
+[*] COLLATE NOCASE is removed in favor of COLLATE NU630_NOCASE
+
+1.2
+
+[*] nu's sqlite3_extension_init() is now deprecated in
+    favor of sqlite3_nunicode_init()
+[*] renamed nunicode_sqlite3_init() into
+    nunicode_sqlite3_static_init()
+
+[+] introduced compound read (decode) iterators to reduce internal
+    complexity of collation
+
+[*] fixed several build options handling
+[*] codepoint compare functions replaced with codepoint weighting 
+    functions
+[*] faster MPH lookup
+[*] collation migrated to reduced DUCET
+
+1.1.2
+
+[+] nu_strrchr (collation)
+[+] nu_strtransformlen (extra)
+
+[*] SQLite3 extension updated with new nu_strtransformlen
+[*] improved documentation
+
+1.1.1
+
+[+] fixed amd64 library size issue
+[+] introduced nunicode_sqlite3_init() for SQLite3 autoextension
+
+[*] some SQLite3 samples
+
+1.1
+
+[+] strings encoding validation
+[+] nu_strbytelen (strings)
+[+] nu_strcoll (collation)
+[+] nu_strchr redone for (collation)
+[+] nu_strstr (collation)
+[+] nu_toupper/nu_tolower (collation)
+[+] UTF-16HE/UTF-32HE
+[+] sqlite3 extension: COLLATE NOCASE, COLLATE NUNICODE,
+    like(), upper(), lower()
+
+[*] nu_utf16_read_bom() and nu_utf32_read_bom() will
+    default encoding to BE if BOM is not present in
+    string
+
+1.0
+
+[-] removed strrchr (strings)
+
+0.9
+
+[*] added extra error checking until validation is released
+[*] changed BOM detection interface
+
+0.8
+
+[+] UTF-8
+[+] CESU-8
+[+] UTF-16
+[+] UTF-32
+[+] nu_strlen, nu_strchr, nu_strrchr (strings)
+[+] reverse reading
