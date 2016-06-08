@@ -33,7 +33,7 @@ option(NU_BUILD_SAMPLES "Build samples" OFF)
 set(NU_BUILD_OPTIONS "-DNU_WITH_EVERYTHING")
 add_definitions(-DNU_BUILD_STATIC)
 
-#include(FindAnyProject)
+include(FindAnyProject)
 #find_anyproject(SQLite3)
 
 # backward-compatibility
