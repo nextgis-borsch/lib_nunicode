@@ -1,14 +1,40 @@
 cmake_minimum_required (VERSION 2.8.12)
 project(libnu C)
 
+
+# some init settings
+set(CMAKE_COLOR_MAKEFILE ON)
+# set path to additional CMake modules
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/borsch-local ${CMAKE_SOURCE_DIR}/borsch ${CMAKE_MODULE_PATH})
+
+include(GNUInstallDirs)
+
+set(INSTALL_LIB_DIR ${CMAKE_INSTALL_LIBDIR} CACHE INTERNAL "Installation directory for libraries" FORCE)
+set(INSTALL_INC_DIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE INTERNAL "Installation directory for headers" FORCE)
+
+include(util)
+include(util-local)
+check_version(PACKAGE_VERSION_MAJOR PACKAGE_VERSION_MINOR)
+set(VERSION ${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR})
+report_version(${PROJECT_NAME} ${VERSION})
+
+# we do it here in order to reach library name in source subdirectories
+if(BUILD_SHARED_LIBS)
+    set(LIB_NAME ${PROJECT_NAME})
+else()
+    set(LIB_NAME ${PROJECT_NAME}static)
+endif()
+
+
 option(NU_BUILD_TESTS "Build tests, only with Debug config" OFF)
 option(NU_BUILD_SAMPLES "Build samples" OFF)
 
 set(NU_BUILD_OPTIONS "-DNU_WITH_EVERYTHING")
 add_definitions(-DNU_BUILD_STATIC)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-find_package(Sqlite3)
+#include(FindAnyProject)
+#find_anyproject(SQLite3)
 
 # backward-compatibility
 if(CMAKE_BUILD_TYPE STREQUAL "RELEASE")
@@ -51,20 +77,20 @@ add_subdirectory(libnu)
 add_subdirectory(unicode.org)
 
 if(NU_BUILD_SAMPLES)
-	add_subdirectory(samples)
+#	add_subdirectory(samples)
 endif(NU_BUILD_SAMPLES)
 
 if(NU_BUILD_TESTS)
-	add_subdirectory(tests)
+#	add_subdirectory(tests)
 endif(NU_BUILD_TESTS)
 
 if(CMAKE_BUILD_TYPE MATCHES PROF)
-	add_subdirectory(tests/prof)
+#	add_subdirectory(tests/prof)
 	if(SQLITE3_FOUND)
-		add_subdirectory(sqlite3/prof)
+#		add_subdirectory(sqlite3/prof)
 	endif(SQLITE3_FOUND)
 endif(CMAKE_BUILD_TYPE MATCHES PROF)
 
 if(SQLITE3_FOUND)
-	add_subdirectory(sqlite3)
+#	add_subdirectory(sqlite3)
 endif(SQLITE3_FOUND)
