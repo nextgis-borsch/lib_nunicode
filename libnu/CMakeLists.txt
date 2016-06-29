@@ -74,7 +74,6 @@ target_compile_definitions(${LIB_NAME} PUBLIC
 	$<$<OR:$<CONFIG:Release>,$<CONFIG:PROF>>:NU_DISABLE_CONTRACTIONS>
 )
 
-export(TARGETS ${LIB_NAME} FILE ${LIB_NAME}-exports.cmake EXPORT_LINK_INTERFACE_LIBRARIES)
 add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
 if(NOT CYGWIN)

@@ -76,6 +76,8 @@ endif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 add_subdirectory(libnu)
 add_subdirectory(unicode.org)
 
+export(TARGETS ${LIB_NAME} FILE ${LIB_NAME}-exports.cmake EXPORT_LINK_INTERFACE_LIBRARIES)
+
 if(NU_BUILD_SAMPLES)
 #	add_subdirectory(samples)
 endif(NU_BUILD_SAMPLES)
