@@ -6,15 +6,15 @@ project(libnu C)
 set(CMAKE_COLOR_MAKEFILE ON)
 # set path to additional CMake modules
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/borsch-local ${CMAKE_SOURCE_DIR}/borsch ${CMAKE_MODULE_PATH})
 
 include(GNUInstallDirs)
 
 set(INSTALL_LIB_DIR ${CMAKE_INSTALL_LIBDIR} CACHE INTERNAL "Installation directory for libraries" FORCE)
 set(INSTALL_INC_DIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE INTERNAL "Installation directory for headers" FORCE)
 
+set(INSTALL_INC_FULL_DIR "${CMAKE_INSTALL_PREFIX}/${INSTALL_INC_DIR}")
+
 include(util)
-include(util-local)
 check_version(PACKAGE_VERSION_MAJOR PACKAGE_VERSION_MINOR)
 set(VERSION ${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR})
 report_version(${PROJECT_NAME} ${VERSION})

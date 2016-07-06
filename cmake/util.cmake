@@ -20,6 +20,14 @@
 # along with this script.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
 
+function(check_version major minor)
+
+    set(${major} "1" PARENT_SCOPE)
+    set(${minor} "6" PARENT_SCOPE)
+
+endfunction(check_version)
+
+
 function(report_version name ver)
 
     string(ASCII 27 Esc)
