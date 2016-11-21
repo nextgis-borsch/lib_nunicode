@@ -20,12 +20,7 @@ set(VERSION ${PACKAGE_VERSION_MAJOR}.${PACKAGE_VERSION_MINOR})
 report_version(${PROJECT_NAME} ${VERSION})
 
 # we do it here in order to reach library name in source subdirectories
-if(BUILD_SHARED_LIBS)
-    set(LIB_NAME ${PROJECT_NAME})
-else()
-    set(LIB_NAME ${PROJECT_NAME}static)
-endif()
-
+set(LIB_NAME ${PROJECT_NAME})
 
 option(NU_BUILD_TESTS "Build tests, only with Debug config" OFF)
 option(NU_BUILD_SAMPLES "Build samples" OFF)
